@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* existing styles */
+
+        /* Additional styles for the contact form */
+        #contactSection {
+            
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.098);
+            max-width: 500px;
+            margin: 40px auto;
+        }
+
+        #contactForm {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #contactForm label {
+            margin-top: 10px;
+        }
+
+        #contactForm input[type="email"],
+        #contactForm input[type="text"],
+        #contactForm textarea {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+
+        #contactForm button {
+            background-color: #FC6A03; /* Orange color to match your theme */
+            color: white; /* White text for contrast */
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+        }
+
+        #contactForm button:hover {
+            background-color: #e55d00; /* Slightly darker orange on hover */
+        }
+    </style>
+    <style>
+        /* existing styles */
+    
+        /* Add these styles for availability */
+        .available {
+            color: green;
+        }
+    
+        .not-available {
+            color: red;
+        }
+    </style>
+    <style>
+        /* existing styles */
+    
+        .not-sure {
+            color: grey;
+        }
+    </style>
+    <style>
+        :root {
+            --color-primary: orange;
+            --color-accent: green;
+            --color-background: white;
+            --color-foreground: black;
+        }
+        
+
+        select, input[type='radio'], label, button {
+            margin: 5px 0;
+        }
+    </style>
+    <style>
+        /* existing styles */
+
+        /* Style for the UTD Map button */
+        #utdMapButton {
+            font-size: 1.2em; /* Larger font size */
+            padding: 10px 20px; /* Padding for larger button */
+            border-radius: 30px; /* Oval shape */
+            display: block; /* Block level element */
+            margin: 20px auto; /* Centering the button */
+            background-color: #FC6A03; /* Button color */
+            color: white; /* Text color */
+            border: none; /* No border */
+            cursor: pointer; /* Pointer cursor on hover */
+            text-align: center; /* Center text */
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>Roomie</title>
+</head>
+<body>
+    <nav class="container-fluid">
+        <ul>
+            <li><strong><a href="#"><font color="green">Roomie For UT Dallas</strong></li>
+        </ul>
+        <ul>
+
+            <li><a href="#contactSection" role="button" style="background-color:green;"><font color="black">Contact</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+        <div class="grid">
+            <section>
+                <hgroup>
+                
+                    <h2 style="color:green;">Select Building and Room</h2>
+                    <h3 style="color:#FC6A03;">Quickly check if rooms are free or report their current status in real-time. It's easy, reliable, and helps everyone find a study space efficiently!!</h3>
+                </hgroup>
+                <form id="roomForm" action="submit_availability.php" method="post">
+                    <label for="building-select">Choose a Building:</label>
+                    <select id="building-select" name="building" onchange="updateRooms()">
+                        <option value="">--Select a Building--</option>
+                        <option value="engineering">Engineering and Computer Science West (ECSW)</option>
+                        <option value="science">Science Building (SCI)</option>
+                    </select>
+
+                    <label for="room-select">Choose a Room:</label>
+                    <select id="room-select" name="room_name">
+                        <option value="">--Select a Room--</option>
+                        <!-- Room options will be dynamically added here -->
+                    </select>
+
+                    <div>
+                        <input type="radio" id="available" name="availability" value="Available">
+                        <label for="available" style="color:green;">Available</label>
+                        <input type="radio" id="not-available" name="availability" value="Not Available">
+                        <label for="not-available" style="color:red;">Not Available</label>
+                    </div>
+                    <button type="submit" id="submitVoteButton" style="background-color:#FC6A03;">Submit Vote</button>
+                </form>
+            </section>
+        </div>
+    </main>
+    <section aria-label="Room Availability">
+        <div class="container">
+            <article>
+                <hgroup>
+                    <h2>Room Availability by Building</h2>
+                </hgroup>
+                <div id="availabilityList">
+                    <h3>Engineering and Computer Science West (ECSW)</h3>
+                    <p id="ECSW 2.125">ECSW 2.125: Not Sure</p>
+                    <p id="ECSW 2.160">ECSW 2.160: Not Sure</p>
+                    <p id="ECSW 2.330">ECSW 2.330: Not Sure</p>
+                    <p id="ECSW 2.369">ECSW 2.369: Not Sure</p>
+                    <p id="ECSW 3.125">ECSW 3.125: Not Sure</p>
+                    <p id="ECSW 3.160">ECSW 3.160: Not Sure</p>
+                    <p id="ECSW 3.330">ECSW 3.330: Not Sure</p>
+                    <p id="ECSW 4.125">ECSW 4.125: Not Sure</p>
+                    <p id="ECSW 4.160">ECSW 4.160: Not Sure</p>
+                    <p id="ECSW 4.330">ECSW 4.330: Not Sure</p>
+                    <h3>Science Building (SCI)</h3>
+                    <p id="SCI B.128">SCI B.128: Not Sure</p>
+                    <p id="SCI B.176">SCI B.176: Not Sure</p>
+                    <p id="SCI 1.121">SCI 1.121: Not Sure</p>
+                    <p id="SCI 1.176">SCI 1.176: Not Sure</p>
+                    <p id="SCI 2.106">SCI 2.106: Not Sure</p>
+                    <p id="SCI 2.146">SCI 2.146: Not Sure</p>
+                    <p id="SCI 2.176">SCI 2.176: Not Sure</p>
+                    <p id="SCI 3.110">SCI 3.110: Not Sure</p>
+                    <p id="SCI 3.166">SCI 3.166: Not Sure</p>
+                    <p id="SCI 3.176">SCI 3.176: Not Sure</p>
+                </div>
+            </article>
+        </div>
+    </section>
+    <section aria-label="Room Availability">
+        <div class="container">
+            
+            <!-- Styled and centered button -->
+            <button id="utdMapButton">View UTD Map</button>
+        </div>
+    </section>
+    <section id="contactSection">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <form id="contactForm">
+                <label for="userEmail">Your Email:</label>
+                <input type="email" id="userEmail" name="userEmail" required>
+
+                <label for="subject">Subject:</label>
+                <input type="text" id="subject" name="subject" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </section>
+    
+    <footer class="container">
+        
+    </footer>
+    <script>
+        var rooms = {
+            'engineering': ['ECSW 2.125', 'ECSW 2.160', 'ECSW 2.330', 'ECSW 2.369', 'ECSW 3.125', 'ECSW 3.160', 'ECSW 3.330', 'ECSW 4.125', 'ECSW 4.160', 'ECSW 4.330'],
+            'science': ['SCI B.128', 'SCI B.176', 'SCI 1.121', 'SCI 1.176', 'SCI 2.106', 'SCI 2.146', 'SCI 2.176', 'SCI 3.110', 'SCI 3.166', 'SCI 3.176']
+        };
+
+        function updateRooms() {
+            var buildingSelect = document.getElementById('building-select');
+            var roomSelect = document.getElementById('room-select');
+            roomSelect.innerHTML = '<option value=\"\">--Select a Room--</option>';
+
+            if (buildingSelect.value) {
+                rooms[buildingSelect.value].forEach(function(room) {
+                    var option = document.createElement('option');
+                    option.value = room;
+                    option.text = room;
+                    roomSelect.appendChild(option);
+                });
+            }
+        }
+
+        /*function updateAvailability() {
+    var selectedRoom = document.getElementById('room-select').value;
+    var availabilityOptions = document.getElementsByName('availability');
+    var selectedAvailability;
+
+    for (var option of availabilityOptions) {
+        if (option.checked) {
+            selectedAvailability = option.value;
+            break;
+        }
+    }
+
+    if (selectedRoom && selectedAvailability) {
+        fetch('update_availability.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `room=${selectedRoom}&availability=${selectedAvailability}`
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log('Availability updated:', data);
+            fetchAndUpdateAvailability(); // Fetch the latest availability after update
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}*/
+
+        function fetchAndUpdateAvailability() {
+            fetch('fetch_availability.php')
+                .then(response => response.json())
+                .then(data => {
+                    for (var room in data) {
+                        var roomElement = document.getElementById(room);
+                        var availability = data[room];
+                        roomElement.innerHTML = room + ': ' + '<span class="' + getClassForAvailability(availability) + '">' + availability + '</span>';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Helper function to get the CSS class based on availability
+        function getClassForAvailability(availability) {
+            return availability === 'Available' ? 'available' : (availability === 'Not Available' ? 'not-available' : 'not-sure');
+        }
+
+        // Initialize and set interval for fetching updates
+        window.onload = () => {
+            fetchAndUpdateAvailability();
+            setInterval(fetchAndUpdateAvailability, 5000); // Adjust the interval as needed
+        };
+
+        
+        // this is to set the time it restarts ---
+        // Event listener for the button
+        document.getElementById('utdMapButton').addEventListener('click', function() {
+            window.location.href = 'https://www.utdallas.edu/map/';
+        });
+    </script>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var userEmail = document.getElementById('userEmail').value;
+            var subject = document.getElementById('subject').value;
+            var message = document.getElementById('message').value;
+
+            var mailtoLink = 'mailto:zaideltiar123@gmail.com?cc=' + userEmail + '&subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(message);
+
+            window.location.href = mailtoLink;
+        });
+    </script>
+    <script>
+        document.getElementById('roomForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            var formData = new FormData(this);
+
+            fetch('submit_availability.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Success:', data);
+                fetchAndUpdateAvailability(); // Update the availability list
+                // Optionally, clear the form or provide a success message
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+<script>
+    // ... other JavaScript code ...
+
+    // Modified script for roomForm submission with loading effect
+    document.getElementById('roomForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Disable the button and show loading text
+        var submitButton = document.getElementById('submitVoteButton');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Loading...';
+
+        // Wait for 1 second before submitting the form
+        setTimeout(() => {
+            var formData = new FormData(this);
+
+            fetch('submit_availability.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Success:', data);
+                fetchAndUpdateAvailability(); // Update the availability list
+
+                // Re-enable the button and reset its text
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Vote';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Vote';
+            });
+        }, 1000); // 1000 milliseconds = 1 second
+    });
+
+    // ... other JavaScript code ...
+</script>
+</body>
+</html>
+
